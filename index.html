@@ -11,6 +11,29 @@
         body {
             font-family: 'Inter', sans-serif;
         }
+        /* Custom modal styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.75);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .modal-content {
+            background-color: #1a202c; /* Dark gray, similar to card background */
+            padding: 2rem;
+            border-radius: 0.75rem; /* rounded-lg */
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            border: 2px solid #dc2626; /* red-700 */
+            width: 90%;
+            max-width: 400px;
+        }
     </style>
 </head>
 <body class="bg-black min-h-screen flex items-center justify-center p-4">
@@ -18,80 +41,168 @@
         <h1 class="text-2xl font-bold text-red-500 mb-6">CrimTunes 🎬</h1>
         <p class="text-gray-300 mb-8">Click on any link below to watch the video!</p>
 
-        <ul class="space-y-4">
-            <!-- Link: Hit Me with Your Best Shot (at the top) -->
-            <li>
-                <a href="https://youtu.be/FWViFBAdTNo" target="_blank" rel="noopener noreferrer"
-                   class="block bg-red-700 hover:bg-red-800 text-white font-semibold py-3 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 shadow-md">
-                    Hit Me with Your Best Shot
-                </a>
-            </li>
-            <!-- Existing Link: We Belong -->
-            <li>
-                <a href="https://www.youtube.com/watch?v=gWIamjTDw0M&ab_channel=LarkinPoe" target="_blank" rel="noopener noreferrer"
-                   class="block bg-red-700 hover:bg-red-800 text-white font-semibold py-3 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 shadow-md">
-                    We Belong
-                </a>
-            </li>
-            <!-- Existing Link 1 -->
-            <li>
-                <a href="https://youtu.be/gfiqW1WaGbw" target="_blank" rel="noopener noreferrer"
-                   class="block bg-red-700 hover:bg-red-800 text-white font-semibold py-3 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 shadow-md">
-                    Les Yeux Noirs (Dark Eyes)
-                </a>
-            </li>
-            <!-- Existing Link 2 -->
-            <li>
-                <a href="https://youtu.be/Vol9dZ-t93s" target="_blank" rel="noopener noreferrer"
-                   class="block bg-red-700 hover:bg-red-800 text-white font-semibold py-3 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 shadow-md">
-                    Sous le Ciel de Paris | Edith Piaf
-                </a>
-            </li>
-            <!-- Existing Link 3 -->
-            <li>
-                <a href="https://youtu.be/6THHrPyZQuQ" target="_blank" rel="noopener noreferrer"
-                   class="block bg-red-700 hover:bg-red-800 text-white font-semibold py-3 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 shadow-md">
-                    Zaz - Qué vendrá
-                </a>
-            </li>
-            <!-- Existing Link 4 -->
-            <li>
-                <a href="https://youtu.be/uFmcBtXJ3_g" target="_blank" rel="noopener noreferrer"
-                   class="block bg-red-700 hover:bg-red-800 text-white font-semibold py-3 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 shadow-md">
-                    Ye Ke Ye Ke
-                </a>
-            </li>
-            <!-- Existing Link: Sweel Jezebel -->
-            <li>
-                <a href="https://www.youtube.com/watch?v=fCuKTDfouMI&ab_channel=MeanMary" target="_blank" rel="noopener noreferrer"
-                   class="block bg-red-700 hover:bg-red-800 text-white font-semibold py-3 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 shadow-md">
-                    Sweel Jezebel
-                </a>
-            </li>
-            <!-- Existing Link: Ac-Cent-Tchu-Ate the Positive -->
-            <li>
-                <a href="https://youtu.be/CiCR3z6Gs5E" target="_blank" rel="noopener noreferrer"
-                   class="block bg-red-700 hover:bg-red-800 text-white font-semibold py-3 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 shadow-md">
-                    Ac-Cent-Tchu-Ate the Positive
-                </a>
-            </li>
-            <!-- Existing Link: Broken -->
-            <li>
-                <a href="https://youtu.be/hPC2Fp7IT7o" target="_blank" rel="noopener noreferrer"
-                   class="block bg-red-700 hover:bg-red-800 text-white font-semibold py-3 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 shadow-md">
-                    Broken
-                </a>
-            </li>
-            <!-- New Link: Secret Plans -->
-            <li>
-                <a href="https://youtu.be/7mEnqN_qNV0" target="_blank" rel="noopener noreferrer"
-                   class="block bg-red-700 hover:bg-red-800 text-white font-semibold py-3 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 shadow-md">
-                    Secret Plans
-                </a>
-            </li>
+        <ul id="links-list" class="space-y-4">
+            <!-- Links will be dynamically loaded here by JavaScript -->
+            <li class="text-gray-400">Loading links from spreadsheet...</li>
         </ul>
 
         <p class="text-gray-400 text-sm mt-8">&copy; 2025 CrimTunes. All rights reserved.</p>
     </div>
+
+    <!-- Password Modal Structure -->
+    <div id="password-modal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <h2 class="text-xl font-bold text-white mb-4">Enter Password</h2>
+            <input type="password" id="password-input"
+                   class="w-full p-3 rounded-md bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500 mb-4"
+                   placeholder="Password">
+            <p id="password-error" class="text-red-400 text-sm mb-4 hidden">Incorrect password.</p>
+            <div class="flex justify-center space-x-4">
+                <button id="submit-password"
+                        class="bg-red-700 hover:bg-red-800 text-white font-semibold py-2 px-4 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 shadow-md">
+                    Submit
+                </button>
+                <button id="cancel-password"
+                        class="bg-gray-600 hover:bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 shadow-md">
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Store the currently active link's URL and password
+        let currentProtectedLink = { url: '', password: '' };
+
+        // Get modal elements
+        const passwordModal = document.getElementById('password-modal');
+        const passwordInput = document.getElementById('password-input');
+        const passwordError = document.getElementById('password-error');
+        const submitPasswordBtn = document.getElementById('submit-password');
+        const cancelPasswordBtn = document.getElementById('cancel-password');
+
+        // Function to show the password modal
+        function showPasswordModal(url, password) {
+            currentProtectedLink = { url, password };
+            passwordInput.value = ''; // Clear previous input
+            passwordError.classList.add('hidden'); // Hide any previous error
+            passwordModal.classList.remove('hidden'); // Show modal
+            passwordInput.focus(); // Focus on input field
+        }
+
+        // Function to hide the password modal
+        function hidePasswordModal() {
+            passwordModal.classList.add('hidden');
+        }
+
+        // Handle password submission
+        submitPasswordBtn.addEventListener('click', () => {
+            if (passwordInput.value === currentProtectedLink.password) {
+                window.open(currentProtectedLink.url, '_blank'); // Open link in new tab
+                hidePasswordModal();
+            } else {
+                passwordError.classList.remove('hidden'); // Show error message
+            }
+        });
+
+        // Handle password input keypress (for Enter key)
+        passwordInput.addEventListener('keypress', (event) => {
+            if (event.key === 'Enter') {
+                submitPasswordBtn.click(); // Simulate a click on the submit button
+            }
+        });
+
+        // Handle modal cancellation
+        cancelPasswordBtn.addEventListener('click', hidePasswordModal);
+
+
+        // Function to fetch and display links from a published CSV Google Sheet
+        async function loadLinksFromCsv(csvUrl) {
+            const linksList = document.getElementById('links-list');
+            linksList.innerHTML = '<li class="text-gray-400">Loading links from spreadsheet...</li>'; // Show loading message
+
+            try {
+                const response = await fetch(csvUrl);
+
+                // Check if the request was successful
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const csvText = await response.text();
+
+                // Simple CSV parsing logic
+                const lines = csvText.trim().split('\n');
+                if (lines.length < 2) { // Check if there's at least a header and one data row
+                    throw new Error("CSV data is empty or malformed.");
+                }
+                const headers = lines[0].split(',').map(header => header.trim()); // Trim header names
+                
+                // Ensure 'title' and 'url' headers exist
+                if (!headers.includes('title') || !headers.includes('url')) {
+                    throw new Error("CSV must contain 'title' and 'url' columns.");
+                }
+                // Optional: Check for a description/hover_text column and a password column
+                const descriptionHeader = headers.includes('description') ? 'description' : (headers.includes('hover_text') ? 'hover_text' : null);
+                const passwordHeader = headers.includes('password') ? 'password' : null;
+
+
+                const links = lines.slice(1).map(line => {
+                    const values = line.split(',');
+                    let obj = {};
+                    headers.forEach((header, index) => {
+                        obj[header] = values[index] ? values[index].trim() : ''; // Handle missing values
+                    });
+                    return obj;
+                });
+
+                // Clear the loading message
+                linksList.innerHTML = '';
+
+                // Iterate over the links and create list items
+                links.forEach(link => {
+                    // Ensure the parsed link object has title and url properties
+                    if (link.title && link.url) {
+                        const listItem = document.createElement('li');
+                        // Use the descriptionHeader to get the hover text, if the column exists
+                        const hoverText = descriptionHeader && link[descriptionHeader] ? `title="${link[descriptionHeader]}"` : '';
+                        
+                        // Check if this link has a password
+                        const password = passwordHeader && link[passwordHeader] ? link[passwordHeader] : null;
+
+                        if (password) {
+                            // If there's a password, attach an onclick event to show the modal
+                            listItem.innerHTML = `
+                                <a href="javascript:void(0);" 
+                                   onclick="showPasswordModal('${link.url.replace(/'/g, "\\'")}', '${password.replace(/'/g, "\\'")}')"
+                                   ${hoverText}
+                                   class="block bg-red-700 hover:bg-red-800 text-white font-semibold py-3 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 shadow-md">
+                                    🔒 ${link.title}
+                                </a>
+                            `;
+                        } else {
+                            // No password, behave as a regular link
+                            listItem.innerHTML = `
+                                <a href="${link.url}" target="_blank" rel="noopener noreferrer"
+                                   ${hoverText}
+                                   class="block bg-red-700 hover:bg-red-800 text-white font-semibold py-3 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 shadow-md">
+                                    ${link.title}
+                                </a>
+                            `;
+                        }
+                        linksList.appendChild(listItem);
+                    }
+                });
+            } catch (error) {
+                console.error("Failed to load links from spreadsheet:", error);
+                linksList.innerHTML = `<li class="text-red-400">Error loading links: ${error.message}. Please ensure the Google Sheet is published correctly as CSV and has 'title', 'url' columns (and optional 'description' or 'hover_text', 'password' columns).</li>`;
+            }
+        }
+
+        const GOOGLE_SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQnriNb1qok2cpI-ipF9Pl7IPHzLubtUMKE6GAsLmea9GrQ1BkNHRhLd7bI_e77DHyQ70noUHyTjVQY/pub?gid=865393910&single=true&output=csv'; 
+
+        // Load links when the page content is fully loaded
+        document.addEventListener('DOMContentLoaded', () => loadLinksFromCsv(GOOGLE_SHEET_CSV_URL));
+    </script>
 </body>
 </html>
